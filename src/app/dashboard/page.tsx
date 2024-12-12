@@ -1,3 +1,10 @@
+"use client";
+import ProtectedRoute from "@/src/components/ProtectedRoute";
+
 export default function Dashboard() {
-    return <h1>Dashboard</h1>
+    return (
+        <ProtectedRoute>
+            <h1>Dashboard</h1>
+        </ProtectedRoute>
+    )
 }

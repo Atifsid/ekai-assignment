@@ -1,9 +1,19 @@
+"use client";
 import { StytchLogin } from '@stytch/nextjs';
 import { Products, StytchLoginConfig } from '@stytch/vanilla-js';
 import useIsLargeScreen from '../../helpers/hooks/useIsLargeScreen';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { AppDispatch } from '@/src/lib/store';
+import { useDispatch } from 'react-redux';
+import { login } from '@/src/lib/features/session/sessionSlice';
+import Loading from '@/src/components/Loading';
 
-export const Login = () => {
+export default function Login() {
     const { isLargeScreen } = useIsLargeScreen();
+    const router = useRouter();
+    const [userDetails, setUserDetails] = useState<string | null>(null);
+    const dispatch = useDispatch<AppDispatch>();
 
     const styles = {
         container: {
@@ -26,5 +36,27 @@ export const Login = () => {
         }
     };
 
-    return <StytchLogin config={config} styles={styles} />;
+    useEffect(() => {
+        const userDetails = localStorage.getItem('userDetail');
+        if (userDetails && userDetails != '') {
+            setUserDetails(userDetails);
+            const parsedUserDetails = JSON.parse(userDetails);
+            if (!parsedUserDetails || parsedUserDetails === '') {
+                router.push('/login');
+            } else {
+                dispatch(login(parsedUserDetails))
+                router.push('/dashboard');
+            }
+        }
+    }, [router]);
+
+    if (!userDetails) {
+        return <div><Loading /> </div>;
+    }
+
+    return (
+        <div className='flex justify-center items-center h-screen'>
+            <StytchLogin config={config} styles={styles} />
+        </div>
+    );
 }

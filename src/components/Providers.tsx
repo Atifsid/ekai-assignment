@@ -2,6 +2,8 @@
 import { ReactNode } from "react"
 import { StytchProvider } from '@stytch/nextjs';
 import { createStytchUIClient } from '@stytch/nextjs/ui';
+import { Provider } from 'react-redux';
+import { store } from '../lib/store';
 
 const stytchOptions = {
     cookieOptions: {
@@ -18,11 +20,13 @@ const stytchClient = createStytchUIClient(
     stytchOptions
 );
 
-export const MainWrapper = ({ children }: { children: ReactNode }) => {
+export const Providers = ({ children }: { children: ReactNode }) => {
     return (
         <main>
             <StytchProvider stytch={stytchClient}>
-                {children}
+                <Provider store={store}>
+                    {children}
+                </Provider>
             </StytchProvider>
         </main>
     )
