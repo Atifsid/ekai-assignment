@@ -14,13 +14,11 @@ const ProtectedRoute = ({ children }: any) => {
         const userDetails = localStorage.getItem('userDetail');
         if (userDetails && userDetails != '') {
             setUserDetails(userDetails);
-            const parsedUserDetails = JSON.parse(userDetails);
-            if (!parsedUserDetails || parsedUserDetails === '') {
-                router.push('/login');
-            } else {
-                dispatch(login(parsedUserDetails))
-                router.push('/dashboard');
-            }
+            const parsedUserDetails = JSON.parse(JSON.stringify(userDetails));
+            dispatch(login(parsedUserDetails))
+            router.push('/dashboard');
+        } else {
+            router.push('/login');
         }
     }, [router]);
 
