@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import { AppDispatch } from '@/src/lib/store';
 import { useDispatch } from 'react-redux';
 import { login } from '@/src/lib/features/session/sessionSlice';
-import Loading from '@/src/components/Loading';
 
 export default function Login() {
     const { isLargeScreen } = useIsLargeScreen();
