@@ -1,27 +1,47 @@
-import { chats } from '@/src/helpers/constants/chats';
+import { CATEGORIES } from '@/src/helpers/constants/chats';
 import { Chat } from '@/src/helpers/model/Chat';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ChatState {
-    selectedChatIdx: number;
-    chats: Chat[];
+    selectedChatInfo: { category: string, id: string };
+    categories: {
+        [categoryId: string]: Array<Chat>;
+    };
 }
 
 const initialState: ChatState = {
-    selectedChatIdx: 0,
-    chats: chats
+    selectedChatInfo: {
+        category: 'Work',
+        id: 'chat-1',
+    },
+    categories: CATEGORIES,
 };
 
 const sessionSlice = createSlice({
     name: 'chat',
     initialState,
     reducers: {
-        updateSelectedChatIdx: (state, action: PayloadAction<{ newIndex: number }>) => {
-            state.selectedChatIdx = action.payload.newIndex;
+        moveChatToCategory: (state: ChatState, action: PayloadAction<{ chatId: string; categoryId: string }>) => {
+            const { chatId, categoryId } = action.payload;
+            state.selectedChatInfo = {
+                category: action.payload.categoryId,
+                id: action.payload.chatId
+            };
+            let chatToMove;
+            for (let category in state.categories) {
+                const chatIndex = state.categories[category].findIndex(chat => chat.id === chatId);
+                if (chatIndex !== -1) {
+                    chatToMove = state.categories[category].splice(chatIndex, 1)[0];
+                    break;
+                }
+            }
+            if (chatToMove) {
+                state.categories[categoryId].push(chatToMove);
+            }
         }
     },
 });
 
-export const { updateSelectedChatIdx } = sessionSlice.actions;
+export const { moveChatToCategory } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

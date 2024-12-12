@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaArrowUp } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { RootState } from '../lib/store';
@@ -6,6 +6,14 @@ import { RootState } from '../lib/store';
 export const Chat = () => {
     const chatState = useSelector((state: RootState) => state.chat)
     const [input, setInput] = useState<string>('');
+    const selectedChat = chatState.categories[chatState.selectedChatInfo?.category]?.find(
+        (chat) => chat.id === chatState.selectedChatInfo?.id
+    );
+
+    useEffect(() => {
+        console.log(selectedChat);
+
+    }, [selectedChat])
 
     const handleSendMessage = () => {
         if (input.trim()) {
@@ -16,8 +24,9 @@ export const Chat = () => {
 
     return (
         <div className="flex-1 p-4 flex flex-col bg-white shadow-md rounded-tl-lg rounded-tr-lg md:rounded-none pt-[60px]">
+            <h1 className='text-lg text-center text-pretty'>{selectedChat?.title}</h1>
             <div className="flex-1 overflow-y-auto">
-                {chatState.chats[chatState.selectedChatIdx].messages.map((msg, index) => (
+                {selectedChat?.messages.map((msg, index) => (
                     <React.Fragment key={index}>
                         <div className="flex justify-end py-3">
                             <span className='bg-gray-100 px-2 py-1 rounded-md'>{msg.question}</span>
