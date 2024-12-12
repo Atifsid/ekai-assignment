@@ -11,6 +11,9 @@ const ProtectedRoute = ({ children }: any) => {
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
+        // instead of this next js' middleware must be used.
+        // get token from NextRequest or check if it's a unauthorized req
+        // then navigate to login else dashboard.
         const userDetails = localStorage.getItem('userDetail');
         if (userDetails && userDetails != '') {
             setUserDetails(userDetails);
