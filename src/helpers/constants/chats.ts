@@ -74,22 +74,22 @@ export const CATEGORIES = {
 }
 
 export const CATEGORY_BG_COLORS: { [key: string]: string } = {
-    "Work": "bg-slate-700",
-    "Social": "bg-rose-700",  // Similar to slate, but warmer
-    "Support": "bg-teal-700",  // Deep teal for a more professional look
-    "Random": "bg-indigo-800", // Slightly darker for a rich tone
+    "Work": "#2D3748",
+    "Social": "#BE185D",
+    "Support": "#14B8A6",
+    "Random": "#4338CA",
 };
 
 export const CATEGORY_FONT_COLORS: { [key: string]: string } = {
     "Work": "text-gray-200",
-    "Social": "text-gray-100",  // Soft, but maintains contrast
-    "Support": "text-gray-100", // Consistent readability
-    "Random": "text-gray-100",  // Light gray for better readability
+    "Social": "text-gray-100",
+    "Support": "text-gray-100",
+    "Random": "text-gray-100",
 };
 
 export const CATEGORY_ACCENT_COLORS: { [key: string]: string } = {
     "Work": "bg-blue-400",
-    "Social": "bg-orange-400", // Warm accent to complement the base color
-    "Support": "bg-cyan-400",  // A brighter teal for contrast
-    "Random": "bg-purple-400", // A purple accent to go with dark indigo
+    "Social": "bg-orange-400",
+    "Support": "bg-cyan-400",
+    "Random": "bg-purple-400",
 }

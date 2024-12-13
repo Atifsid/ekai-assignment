@@ -14,7 +14,7 @@ export const Input = (props: InputProps) => {
             placeholder={props.placeholder}
             value={props.text}
             onChange={(e) => props.onChangeText(e)}
-            onKeyDown={(e) => props.onKeyPressHandler(e)}
+            onKeyDown={(e) => props.onKeyPressHandler ? props.onKeyPressHandler(e) : undefined}
         />
     )
 }

@@ -2,15 +2,27 @@ import { useDroppable } from "@dnd-kit/core";
 import { MdDeleteForever } from "react-icons/md";
 import { AppDispatch, RootState } from "../lib/store";
 import { useDispatch, useSelector } from "react-redux";
-import { removeCategory } from "../lib/features/chat/chatSlice";
+import { removeCategory, updateCategoryBgColor } from "../lib/features/chat/chatSlice";
+import { JSX, useRef } from "react";
 
 export const CategoryDroppable = ({ categoryId, children }: { categoryId: string; children: React.ReactNode }) => {
     const { setNodeRef } = useDroppable({ id: categoryId });
     const chatState = useSelector((state: RootState) => state.chat)
     const dispatch = useDispatch<AppDispatch>();
+    const colorInputRef = useRef<HTMLInputElement>(null);
 
     const onDeleteCategory = () => {
         dispatch(removeCategory({ categoryIdToRemove: categoryId }));
+    }
+
+    const toggleColorPicker = () => {
+        if (colorInputRef) {
+            colorInputRef.current?.click();
+        }
+    }
+
+    const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(updateCategoryBgColor({ categoryId, colorHex: e.target.value }))
     }
 
     return (
@@ -18,7 +30,18 @@ export const CategoryDroppable = ({ categoryId, children }: { categoryId: string
             <div className="flex items-center justify-between gap-2 mb-2">
                 <div className="font-bold text-white">{categoryId}</div>
                 <span className="flex items-center gap-1">
-                    <div className={`w-4 h-4 ${chatState.categoryBgColors[categoryId]} rounded-full`}></div>
+                    <input
+                        className="absolute opacity-0 pointer-events-none -z-1"
+                        ref={colorInputRef}
+                        type="color"
+                        defaultValue={chatState.categoryBgColors[categoryId]}
+                        onChange={handleColorChange}
+                    />
+                    <div
+                        style={{ backgroundColor: chatState.categoryBgColors[categoryId] }}
+                        className={`w-5 h-5 rounded-full`}
+                        onClick={toggleColorPicker}
+                    ></div>
                     <MdDeleteForever className="text-delete cursor-pointer" size={24} onClick={onDeleteCategory} />
                 </span>
             </div>

@@ -1,4 +1,5 @@
 import { CATEGORIES, CATEGORY_ACCENT_COLORS, CATEGORY_BG_COLORS, CATEGORY_FONT_COLORS } from '@/src/helpers/constants/chats';
+import { getRandomHexColor } from '@/src/helpers/constants/functions';
 import { Chat } from '@/src/helpers/model/Chat';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -57,6 +58,9 @@ const sessionSlice = createSlice({
                 [action.payload.newCategoryId]: [],
                 ...state.categories
             }
+            const updatedBgColors = { ...state.categoryBgColors };
+            updatedBgColors[action.payload.newCategoryId] = getRandomHexColor();
+            state.categoryBgColors = { ...updatedBgColors };
         },
         removeCategory: (state: ChatState, action: PayloadAction<{ categoryIdToRemove: string }>) => {
             if (state.categories[action.payload.categoryIdToRemove]) {
@@ -97,6 +101,11 @@ const sessionSlice = createSlice({
                 chatId: action.payload.chatId,
                 categoryId: action.payload.categoryId
             }
+        },
+        updateCategoryBgColor: (state: ChatState, action: PayloadAction<{ categoryId: string; colorHex: string }>) => {
+            const updateCategoryBgColor = { ...state.categoryBgColors };
+            updateCategoryBgColor[action.payload.categoryId] = action.payload.colorHex;
+            state.categoryBgColors = { ...updateCategoryBgColor };
         }
     },
 });
@@ -109,7 +118,8 @@ export const {
     sendMessage,
     addChat,
     updateChatHeading,
-    updateSelectedChat
+    updateSelectedChat,
+    updateCategoryBgColor
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;
