@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../lib/store';
-import { addCategory, moveChatToCategory } from '../lib/features/chat/chatSlice';
+import { addCategory, addChat, moveChatToCategory } from '../lib/features/chat/chatSlice';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { DraggableChat } from './DraggableChat';
 import { CategoryDroppable } from './CategoryDroppable';
 import { TbCategoryPlus } from "react-icons/tb";
 import { MdOutlineDataSaverOn } from "react-icons/md";
 import { MdCancel } from "react-icons/md";
+import { IoIosAddCircle } from "react-icons/io";
+import { Button } from './Button';
+import { Input } from './Input';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -48,11 +51,15 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         }
     }
 
+    const onAddNewChat = (categoryId: string) => {
+        dispatch(addChat({ categoryId: categoryId }));
+    }
+
     return (
         <DndContext onDragEnd={handleDragEnd}>
             <div
                 className={`fixed md:static z-30 bg-primary text-white p-4 h-screen transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-                    } md:w-[260px] w-48 overflow-auto`}
+                    } md:w-[260px] w-48 overflow-y-auto`}
             >
                 <button
                     className="md:hidden absolute top-4 right-4 text-white"
@@ -64,35 +71,18 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 <h1 className="text-xl font-bold mb-2 text-wrap">{`Hi ${session.user?.username}`}</h1>
 
                 <div className='mb-4'>
-                    {!isSaveNewCategoryVisible && <button className='bg-white text-primary rounded-md font-bold px-2 py-1 w-full' onClick={onAddNewCategory}>
-                        <span className='flex items-center gap-2'>
-                            <TbCategoryPlus size={24} />
-                            New Category
-                        </span>
-                    </button>}
+                    {!isSaveNewCategoryVisible && <Button className={'w-full px-[0.4rem] py-[0.4rem]'} icon={<TbCategoryPlus size={24} />} text={'New Category'} click={onAddNewCategory} />}
 
                     {isSaveNewCategoryVisible &&
                         <div>
-                            <input
-                                type="text"
-                                className="flex-1 px-[0.4rem] py-[0.2rem] text-primary border border-gray-300 rounded-md focus:outline-none"
-                                placeholder="Enter New Category"
-                                value={newCategory}
-                                onChange={(e) => setNewCategory(e.target.value)}
-                            />
+                            <Input
+                                className='flex-1 px-[0.4rem] py-[0.2rem] text-primary border border-gray-300 rounded-md focus:outline-none'
+                                text={newCategory}
+                                placeholder={'Enter New Category'}
+                                onChangeText={(e: any) => setNewCategory(e.target.value)} />
                             <div className='flex flex-col gap-3 mt-4'>
-                                <button className='bg-white text-primary rounded-md font-bold px-[0.4rem] py-[0.1rem]' onClick={onSaveClicked}>
-                                    <span className='flex items-center gap-2'>
-                                        <MdOutlineDataSaverOn size={24} />
-                                        Save
-                                    </span>
-                                </button>
-                                <button className='bg-white text-primary rounded-md font-bold px-[0.4rem] py-[0.1rem]' onClick={onCancelClicked}>
-                                    <span className='flex items-center gap-2'>
-                                        <MdCancel size={24} />
-                                        Cancel
-                                    </span>
-                                </button>
+                                <Button className='px-[0.4rem] py-[0.4rem]' icon={<MdOutlineDataSaverOn size={24} />} text={'Save'} click={onSaveClicked} />
+                                <Button className='px-[0.4rem] py-[0.4rem]' icon={<MdCancel size={24} />} text={'Cancel'} click={onCancelClicked} />
                             </div>
                         </div>}
                 </div>
@@ -105,6 +95,11 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                             {categoryChats.map((chat, idx) => (
                                 <DraggableChat key={chat.id} chat={chat} />
                             ))}
+                            <Button
+                                className='w-full px-[0.4rem] py-[0.4rem]'
+                                icon={<IoIosAddCircle size={24} />}
+                                text={'New Chat'}
+                                click={() => onAddNewChat(categoryId)} />
                         </CategoryDroppable>
                     );
                 })}

@@ -1,8 +1,7 @@
 export const CATEGORIES = {
     'Work': [
         {
-            id: 'chat-1',
-            category: 'Work',
+            id: 'work-chat-0',
             title: 'Project Updates',
             messages: [
                 { question: 'How are we doing on the new project?', answer: 'The project is on schedule and 75% complete.' },
@@ -10,8 +9,7 @@ export const CATEGORIES = {
             ]
         },
         {
-            id: 'chat-2',
-            category: 'Work',
+            id: 'work-chat-1',
             title: 'Team Meeting Recap',
             messages: [
                 { question: 'What was discussed in today\'s meeting?', answer: 'We went over the quarterly goals and client deliverables.' },
@@ -21,8 +19,7 @@ export const CATEGORIES = {
     ],
     'Social': [
         {
-            id: 'chat-3',
-            category: 'Social',
+            id: 'social-chat-0',
             title: 'Weekend Plans',
             messages: [
                 { question: 'Any plans for the weekend?', answer: 'Thinking of going hiking, anyone interested?' },
@@ -30,8 +27,7 @@ export const CATEGORIES = {
             ]
         },
         {
-            id: 'chat-4',
-            category: 'Social',
+            id: 'social-chat-1',
             title: 'Book Club Discussion',
             messages: [
                 { question: 'What did everyone think of the last book?', answer: 'I loved it, especially the character development.' },
@@ -41,8 +37,7 @@ export const CATEGORIES = {
     ],
     'Support': [
         {
-            id: 'chat-5',
-            category: 'Support',
+            id: 'support-chat-0',
             title: 'Technical Issue - Login Problem',
             messages: [
                 { question: 'I can\'t log in to my account, what should I do?', answer: 'Please try resetting your password using the "Forgot Password" option.' },
@@ -50,8 +45,7 @@ export const CATEGORIES = {
             ]
         },
         {
-            id: 'chat-6',
-            category: 'Support',
+            id: 'support-chat-1',
             title: 'Billing Query',
             messages: [
                 { question: 'Why was I charged twice for this month?', answer: 'Let me check your account, I will resolve this issue immediately.' },
@@ -61,8 +55,7 @@ export const CATEGORIES = {
     ],
     'Random': [
         {
-            id: 'chat-7',
-            category: 'Random',
+            id: 'random-chat-0',
             title: 'New Music Recommendations',
             messages: [
                 { question: 'Any good music recommendations?', answer: 'Check out the new album by The Weeknd, it\'s really good!' },
@@ -70,8 +63,7 @@ export const CATEGORIES = {
             ]
         },
         {
-            id: 'chat-8',
-            category: 'Random',
+            id: 'random-chat-1',
             title: 'Funny Memes',
             messages: [
                 { question: 'Saw any good memes lately?', answer: 'Here, check out this hilarious one I found!' },

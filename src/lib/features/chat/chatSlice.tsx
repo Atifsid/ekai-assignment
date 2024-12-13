@@ -12,7 +12,7 @@ interface ChatState {
 const initialState: ChatState = {
     selectedChatInfo: {
         category: 'Work',
-        id: 'chat-1',
+        id: 'work-chat-1',
     },
     categories: CATEGORIES,
 };
@@ -52,18 +52,41 @@ const sessionSlice = createSlice({
             }
         },
         removeChat: (state: ChatState, action: PayloadAction<{ categoryId: string; chatIdToRemove: string }>) => {
-            console.log(state.categories[action.payload.categoryId]);
-
             const chatIdxToRemove = state.categories[action.payload.categoryId]?.findIndex(chat => chat.id === action.payload.chatIdToRemove);
-            console.log(chatIdxToRemove);
 
             if (chatIdxToRemove > -1) {
                 state.categories[action.payload.categoryId].splice(chatIdxToRemove, 1);
+            }
+        },
+        sendMessage: (state: ChatState, action: PayloadAction<{ question: string }>) => {
+            const chatIdx = state.categories[state.selectedChatInfo.category].findIndex(chat => chat.id === state.selectedChatInfo.id);
+            state.categories[state.selectedChatInfo.category][chatIdx].messages.push({ question: action.payload.question, answer: `Answer mock up for: ${action.payload.question}` });
+        },
+        addChat: (state: ChatState, action: PayloadAction<{ categoryId: string }>) => {
+            state.categories[action.payload.categoryId].push({
+                id: `${action.payload.categoryId.toLowerCase()}-chat-${state.categories[action.payload.categoryId].length}`,
+                title: `New Chat ${state.categories[action.payload.categoryId].length}`,
+                messages: []
+            })
+        },
+        updateChatHeading: (state: ChatState, action: PayloadAction<{ heading: string }>) => {
+            const chatIdx = state.categories[state.selectedChatInfo.category]?.findIndex(chat => chat.id === state.selectedChatInfo.id);
+
+            if (chatIdx > -1) {
+                state.categories[state.selectedChatInfo.category][chatIdx].title = action.payload.heading;
             }
         }
     },
 });
 
-export const { moveChatToCategory, addCategory, removeCategory, removeChat } = sessionSlice.actions;
+export const {
+    moveChatToCategory,
+    addCategory,
+    removeCategory,
+    removeChat,
+    sendMessage,
+    addChat,
+    updateChatHeading
+} = sessionSlice.actions;
 
 export default sessionSlice.reducer;

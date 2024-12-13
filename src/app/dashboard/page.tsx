@@ -1,5 +1,4 @@
 "use client";
-import { Avatar } from "@/src/components/Avatar";
 import { Chat } from "@/src/components/Chat";
 import ProtectedRoute from "@/src/components/ProtectedRoute";
 import { Sidebar } from "@/src/components/Sidebar";
