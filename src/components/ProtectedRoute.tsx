@@ -17,6 +17,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
             if (token?.trim() && username?.trim()) {
                 dispatch(login({ token, username }));
+                router.replace("/dashboard");
                 setIsAuthenticated(true);
             } else {
                 setIsAuthenticated(false);
