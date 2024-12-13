@@ -28,7 +28,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { over, active } = event;
-        const endTime = Date.now();
+        const endTime = new Date().getTime();
         const timeTaken = endTime - (startTime ?? endTime);
 
         if (over) {
@@ -67,7 +67,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     }
 
     const handleDragStart = (e: DragStartEvent) => {
-        setStartTime(Date.now());
+        setStartTime(new Date().getTime());
     }
 
     return (
