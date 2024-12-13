@@ -53,9 +53,11 @@ export const Chat = () => {
     }
 
     const handleEnterSendMessage = (e: any) => {
-        setNewMessage(e.target.value);
-        if (e.key == 'Enter') {
-            handleSendMessage();
+        if (selectedChat) {
+            setNewMessage(e.target.value);
+            if (e.key == 'Enter') {
+                handleSendMessage();
+            }
         }
     }
 
@@ -114,8 +116,8 @@ export const Chat = () => {
                         onChangeText={(e: any) => setNewMessage(e.target.value)}
                         onKeyPressHandler={(e: any) => handleEnterSendMessage(e)} />
                     <button
-                        disabled={loading}
-                        className="bg-primary text-white ml-2 px-4 py-[0.71rem] rounded-lg border-y-1 border-primary  hover:bg-blue-600"
+                        disabled={(loading || !(selectedChat))}
+                        className={`bg-primary text-white ml-2 px-4 py-[0.71rem] rounded-lg border-y-1 border-primary ${(!selectedChat) && 'cursor-not-allowed'} ${(!loading) && 'hover:bg-blue-600'}`}
                         onClick={handleSendMessage}
                     >
 
