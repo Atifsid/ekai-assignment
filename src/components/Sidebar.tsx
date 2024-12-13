@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../lib/store';
@@ -19,12 +19,12 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
-    const session = useSelector((state: RootState) => state.session);
     const chatState = useSelector((state: RootState) => state.chat);
     const dispatch = useDispatch<AppDispatch>();
     const [isSaveNewCategoryVisible, setSaveNewCategoryVisible] = useState(false);
     const [newCategory, setNewCategory] = useState<string>('');
     const [startTime, setStartTime] = useState<number | null>(null);
+    const [userName, setUserName] = useState('');
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { over, active } = event;
@@ -70,6 +70,12 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         setStartTime(new Date().getTime());
     }
 
+    useEffect(() => {
+        if (localStorage) {
+            setUserName(localStorage.getItem('userName') ?? 'Mock Name');
+        }
+    }, [])
+
     return (
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} >
             <div
@@ -83,7 +89,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                     <FiX size={24} />
                 </button>
 
-                <h1 className="text-xl font-bold mb-2 text-wrap">{`Hi ${session.username}`}</h1>
+                <h1 className="text-xl font-bold mb-2 text-wrap">{`Hi ${userName}`}</h1>
 
                 <div className='mb-4'>
                     {!isSaveNewCategoryVisible && <Button className={'w-full px-[0.4rem] py-[0.4rem]'} icon={<TbCategoryPlus size={24} />} text={'New Category'} click={onAddNewCategory} />}

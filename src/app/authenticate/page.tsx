@@ -4,8 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useStytch, useStytchUser } from "@stytch/nextjs";
 import Loading from "@/src/components/Loading";
 import { login, logout } from "@/src/lib/features/session/sessionSlice";
-import { AppDispatch } from "../../lib/store";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/src/lib/store";
 
 export default function AuthenticateWrapper() {
     return (
@@ -16,7 +16,7 @@ export default function AuthenticateWrapper() {
 }
 
 function Authenticate() {
-    const { user, isInitialized } = useStytchUser();
+    const { user, isInitialized, } = useStytchUser();
     const stytch = useStytch();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -55,6 +55,7 @@ function Authenticate() {
                 );
                 router.replace("/dashboard");
             } else {
+                stytch.session.revoke();
                 dispatch(logout());
                 router.replace("/login");
             }
