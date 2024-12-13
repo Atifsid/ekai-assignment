@@ -1,3 +1,4 @@
+"use client";
 import AuthenticateWrapper from "./authenticate/page";
 
 export default function Home() {

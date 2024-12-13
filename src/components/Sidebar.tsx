@@ -83,7 +83,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                     <FiX size={24} />
                 </button>
 
-                <h1 className="text-xl font-bold mb-2 text-wrap">{`Hi ${session.user?.username}`}</h1>
+                <h1 className="text-xl font-bold mb-2 text-wrap">{`Hi ${session.username}`}</h1>
 
                 <div className='mb-4'>
                     {!isSaveNewCategoryVisible && <Button className={'w-full px-[0.4rem] py-[0.4rem]'} icon={<TbCategoryPlus size={24} />} text={'New Category'} click={onAddNewCategory} />}

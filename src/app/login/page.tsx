@@ -7,11 +7,12 @@ import { useEffect, useState } from 'react';
 import { AppDispatch } from '@/src/lib/store';
 import { useDispatch } from 'react-redux';
 import { login } from '@/src/lib/features/session/sessionSlice';
+import Loading from '@/src/components/Loading';
 
 export default function Login() {
     const { isLargeScreen } = useIsLargeScreen();
     const router = useRouter();
-    const [userDetails, setUserDetails] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string | null>(null);
     const dispatch = useDispatch<AppDispatch>();
 
     const styles = {
@@ -36,11 +37,12 @@ export default function Login() {
     };
 
     useEffect(() => {
-        const userDetails = localStorage.getItem('userDetail');
-        if (userDetails && userDetails != '') {
-            setUserDetails(userDetails);
-            const parsedUserDetails = JSON.parse(JSON.stringify(userDetails));
-            dispatch(login(parsedUserDetails))
+        setUserId(null);
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('userName');
+        if (token && token != '') {
+            setUserId(token);
+            dispatch(login({ token, username }))
             router.push('/dashboard');
         } else {
             router.push('/login');
@@ -49,7 +51,7 @@ export default function Login() {
 
     return (
         <div className='flex justify-center items-center h-screen'>
-            <StytchLogin config={config} styles={styles} />
+            {!userId ? <StytchLogin config={config} styles={styles} /> : <Loading />}
         </div>
     );
 }

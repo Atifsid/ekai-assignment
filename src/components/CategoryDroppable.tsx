@@ -3,7 +3,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { AppDispatch, RootState } from "../lib/store";
 import { useDispatch, useSelector } from "react-redux";
 import { removeCategory, updateCategoryBgColor } from "../lib/features/chat/chatSlice";
-import { JSX, useRef } from "react";
+import { useRef } from "react";
 
 export const CategoryDroppable = ({ categoryId, children }: { categoryId: string; children: React.ReactNode }) => {
     const { setNodeRef } = useDroppable({ id: categoryId });

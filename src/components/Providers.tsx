@@ -1,9 +1,10 @@
 "use client";
-import { ReactNode } from "react"
+import { ReactNode, useEffect, useRef } from "react"
 import { StytchProvider } from '@stytch/nextjs';
 import { createStytchUIClient } from '@stytch/nextjs/ui';
 import { Provider } from 'react-redux';
-import { store } from '../lib/store';
+import { AppStore, makeStore } from "../lib/store";
+import { initializeSession } from "../lib/features/session/sessionSlice";
 
 const stytchOptions = {
     cookieOptions: {
@@ -21,10 +22,23 @@ const stytchClient = createStytchUIClient(
 );
 
 export const Providers = ({ children }: { children: ReactNode }) => {
+    const storeRef = useRef<AppStore>(null);
+    if (!storeRef.current) {
+        storeRef.current = makeStore();
+    }
+
+    useEffect(() => {
+        if (localStorage === undefined) {
+            setTimeout(() => {
+                storeRef.current?.dispatch(initializeSession())
+            }, 1000);
+        }
+    }, [children])
+
     return (
         <main>
             <StytchProvider stytch={stytchClient}>
-                <Provider store={store}>
+                <Provider store={storeRef.current}>
                     {children}
                 </Provider>
             </StytchProvider>

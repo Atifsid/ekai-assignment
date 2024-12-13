@@ -30,7 +30,7 @@ const initialState: ChatState = {
     categoryAccentColors: CATEGORY_ACCENT_COLORS
 };
 
-const sessionSlice = createSlice({
+const chatSlice = createSlice({
     name: 'chat',
     initialState,
     reducers: {
@@ -120,6 +120,6 @@ export const {
     updateChatHeading,
     updateSelectedChat,
     updateCategoryBgColor
-} = sessionSlice.actions;
+} = chatSlice.actions;
 
-export default sessionSlice.reducer;
+export default chatSlice.reducer;

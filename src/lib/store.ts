@@ -1,13 +1,18 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import sessionReducer from './features/session/sessionSlice';
-import chatSession from './features/chat/chatSlice';
+import chatReducer from './features/chat/chatSlice';
 
-export const store = configureStore({
-    reducer: {
-        session: sessionReducer,
-        chat: chatSession
-    }
-})
+const rootReducer = combineReducers({
+    session: sessionReducer,
+    chat: chatReducer
+});
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export const makeStore = () => {
+    return configureStore({
+        reducer: rootReducer
+    })
+}
+
+export type AppStore = ReturnType<typeof makeStore>
+export type RootState = ReturnType<AppStore['getState']>
+export type AppDispatch = AppStore['dispatch']
