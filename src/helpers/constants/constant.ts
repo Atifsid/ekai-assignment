@@ -81,15 +81,15 @@ export const CATEGORY_BG_COLORS: { [key: string]: string } = {
 };
 
 export const CATEGORY_FONT_COLORS: { [key: string]: string } = {
-    "Work": "text-gray-200",
-    "Social": "text-gray-100",
-    "Support": "text-gray-100",
-    "Random": "text-gray-100",
+    "Work": "#E5E7EB",
+    "Social": "#F5F6F7",
+    "Support": "#F5F6F7",
+    "Random": "#F5F6F7",
 };
 
 export const CATEGORY_ACCENT_COLORS: { [key: string]: string } = {
-    "Work": "bg-blue-400",
-    "Social": "bg-orange-400",
-    "Support": "bg-cyan-400",
-    "Random": "bg-purple-400",
+    "Work": "#60A5FA",
+    "Social": "#FB923C",
+    "Support": "#22D3EE",
+    "Random": "#A78BFA",
 }

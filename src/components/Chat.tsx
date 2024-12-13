@@ -8,7 +8,7 @@ import { Input } from './Input';
 
 export const Chat = () => {
     const chatState = useSelector((state: RootState) => state.chat)
-    const [newMessage, setnewMessage] = useState<string>('');
+    const [newMessage, setNewMessage] = useState<string>('');
     const selectedChat = chatState.categories[chatState.selectedChatInfo?.categoryId]?.find(
         (chat) => chat.id === chatState.selectedChatInfo?.chatId
     );
@@ -27,7 +27,7 @@ export const Chat = () => {
             setLoading(true);
             setTimeout(() => {
                 dispatch(sendMessage({ question: newMessage }));
-                setnewMessage('');
+                setNewMessage('');
                 setLoading(false);
             }, 2000)
         }
@@ -52,12 +52,19 @@ export const Chat = () => {
         setEditHeading(true);
     }
 
+    const handleEnterSendMessage = (e: any) => {
+        setNewMessage(e.target.value);
+        if (e.key == 'Enter') {
+            handleSendMessage();
+        }
+    }
+
     return (
         <div className={`flex-1 p-4 flex flex-col shadow-md pt-[60px]`} style={{ backgroundColor: chatState.categoryBgColors[chatState.selectedChatInfo.categoryId] }}>
-            {!editHeading && <h1 className={`text-center ${chatState.categoryTextColors[chatState.selectedChatInfo.categoryId]} text-[1.8rem] cursor-pointer`} onClick={handleEditHeading}>{selectedChat?.title}</h1>}
+            {!editHeading && <h1 className={`text-center text-[1.8rem] cursor-pointer`} style={{ color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }} onClick={handleEditHeading}>{selectedChat?.title}</h1>}
             {editHeading &&
                 <div className='flex justify-center mb-4'>
-                    <div className={`flex items-center ${chatState.categoryTextColors[chatState.selectedChatInfo.categoryId]} gap-2`}>
+                    <div className={`flex items-center gap-2`} style={{ color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }}>
                         <Input
                             className='px-[0.2rem] py-[0.4rem] lg:text-[1.8rem] text-[1.1rem] text-primary text-center border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200'
                             text={heading!} placeholder={'Enter New Heading'}
@@ -72,9 +79,9 @@ export const Chat = () => {
                 {selectedChat ? selectedChat?.messages.map((msg, index) => (
                     <React.Fragment key={index}>
                         <div className="flex justify-end py-3">
-                            <span className={`${chatState.categoryAccentColors[chatState.selectedChatInfo.categoryId]} ${chatState.categoryTextColors[chatState.selectedChatInfo.categoryId]} py-1 px-2 rounded-md`}>{msg.question}</span>
+                            <span style={{ backgroundColor: chatState.categoryAccentColors[chatState.selectedChatInfo.categoryId], color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }} className={`py-1 px-2 rounded-md`}>{msg.question}</span>
                         </div>
-                        <div className={`text-left ${chatState.categoryTextColors[chatState.selectedChatInfo.categoryId]} py-3`}>
+                        <div className={`text-left py-3`} style={{ color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }}>
                             {msg.answer}
                         </div>
                     </React.Fragment>
@@ -94,17 +101,18 @@ export const Chat = () => {
 
             <div className="flex items-center mt-4">
                 <Input
-                    className={`flex-1 p-[0.2rem] text-primary border border-gray-300 rounded-l-lg focus:outline-none`}
+                    className={`flex-1 py-[0.5rem] px-[0.5rem] text-primary border border-gray-300 rounded-lg focus:outline-none`}
                     text={newMessage}
                     placeholder={'Type a message'}
-                    onChangeText={(e: any) => setnewMessage(e.target.value)} />
+                    onChangeText={(e: any) => setNewMessage(e.target.value)}
+                    onKeyPressHandler={(e: any) => handleEnterSendMessage(e)} />
                 <button
                     disabled={loading}
-                    className="bg-primary text-white px-4 py-2 rounded-r-lg border-y-1 border-primary  hover:bg-blue-600"
+                    className="bg-primary text-white ml-2 px-4 py-[0.71rem] rounded-lg border-y-1 border-primary  hover:bg-blue-600"
                     onClick={handleSendMessage}
                 >
 
-                    {!loading ? <FaArrowUp /> : <svg className="animate-spin w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    {!loading ? <FaArrowUp size={20} /> : <svg className="animate-spin w-[20px] text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>}

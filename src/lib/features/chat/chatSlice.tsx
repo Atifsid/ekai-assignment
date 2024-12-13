@@ -1,5 +1,5 @@
-import { CATEGORIES, CATEGORY_ACCENT_COLORS, CATEGORY_BG_COLORS, CATEGORY_FONT_COLORS } from '@/src/helpers/constants/chats';
-import { getRandomHexColor } from '@/src/helpers/constants/functions';
+import { CATEGORIES, CATEGORY_ACCENT_COLORS, CATEGORY_BG_COLORS, CATEGORY_FONT_COLORS } from '@/src/helpers/constants/constant';
+import { generateFontAndAccentColors, getRandomHexColor } from '@/src/helpers/constants/functions';
 import { Chat } from '@/src/helpers/model/Chat';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -58,9 +58,23 @@ const chatSlice = createSlice({
                 [action.payload.newCategoryId]: [],
                 ...state.categories
             }
+
+            const newColor = getRandomHexColor();
+            const { fontColor, accentColor } = generateFontAndAccentColors(newColor);
+            // bg color
             const updatedBgColors = { ...state.categoryBgColors };
-            updatedBgColors[action.payload.newCategoryId] = getRandomHexColor();
+            updatedBgColors[action.payload.newCategoryId] = newColor;
             state.categoryBgColors = { ...updatedBgColors };
+
+            // font color
+            const updatedFontColors = { ...state.categoryTextColors };
+            updatedFontColors[action.payload.newCategoryId] = fontColor;
+            state.categoryTextColors = { ...updatedFontColors };
+
+            // accent color
+            const updateAccesntColors = { ...state.categoryAccentColors };
+            updateAccesntColors[action.payload.newCategoryId] = accentColor;
+            state.categoryAccentColors = { ...updateAccesntColors };
         },
         removeCategory: (state: ChatState, action: PayloadAction<{ categoryIdToRemove: string }>) => {
             if (state.categories[action.payload.categoryIdToRemove]) {
