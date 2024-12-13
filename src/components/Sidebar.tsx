@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../lib/store';
-import { addCategory, addChat, moveChatToCategory } from '../lib/features/chat/chatSlice';
-import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { addCategory, addChat, moveChatToCategory, updateSelectedChat } from '../lib/features/chat/chatSlice';
+import { DndContext, DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { DraggableChat } from './DraggableChat';
 import { CategoryDroppable } from './CategoryDroppable';
 import { TbCategoryPlus } from "react-icons/tb";
@@ -24,15 +24,26 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     const dispatch = useDispatch<AppDispatch>();
     const [isSaveNewCategoryVisible, setSaveNewCategoryVisible] = useState(false);
     const [newCategory, setNewCategory] = useState<string>('');
+    const [startTime, setStartTime] = useState<number | null>(null);
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { over, active } = event;
-        if (over && active.id !== over.id) {
+        const endTime = Date.now();
+        const timeTaken = endTime - (startTime ?? endTime);
+
+        if (over) {
             const categoryId = over.id.toString();
             const chatId = active.id.toString();
 
-            dispatch(moveChatToCategory({ chatId, categoryId }));
+            if (timeTaken < 300) {
+                dispatch(updateSelectedChat({ chatId, categoryId }));
+            } else {
+                if (over && active.id !== over.id) {
+                    dispatch(moveChatToCategory({ chatId, categoryId }));
+                }
+            }
         }
+
     };
 
     const onAddNewCategory = () => {
@@ -55,8 +66,12 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         dispatch(addChat({ categoryId: categoryId }));
     }
 
+    const handleDragStart = (e: DragStartEvent) => {
+        setStartTime(Date.now());
+    }
+
     return (
-        <DndContext onDragEnd={handleDragEnd}>
+        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} >
             <div
                 className={`fixed md:static z-30 bg-primary text-white p-4 h-screen transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
                     } md:w-[260px] w-48 overflow-y-auto`}

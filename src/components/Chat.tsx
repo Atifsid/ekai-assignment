@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaArrowUp, FaCheckCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../lib/store';
@@ -9,13 +9,18 @@ import { Input } from './Input';
 export const Chat = () => {
     const chatState = useSelector((state: RootState) => state.chat)
     const [newMessage, setnewMessage] = useState<string>('');
-    const selectedChat = chatState.categories[chatState.selectedChatInfo?.category]?.find(
-        (chat) => chat.id === chatState.selectedChatInfo?.id
+    const selectedChat = chatState.categories[chatState.selectedChatInfo?.categoryId]?.find(
+        (chat) => chat.id === chatState.selectedChatInfo?.chatId
     );
     const dispatch = useDispatch<AppDispatch>();
     const [loading, setLoading] = useState(false);
-    const [heading, setHeading] = useState(selectedChat?.title);
+    const [heading, setHeading] = useState('');
     const [editHeading, setEditHeading] = useState(false);
+
+    useEffect(() => {
+        setHeading('');
+        setEditHeading(false);
+    }, [chatState.selectedChatInfo])
 
     const handleSendMessage = () => {
         if (newMessage.trim()) {
@@ -42,14 +47,19 @@ export const Chat = () => {
         }
     }
 
+    const handleEditHeading = () => {
+        setHeading(selectedChat?.title!);
+        setEditHeading(true);
+    }
+
     return (
-        <div className="flex-1 p-4 flex flex-col bg-white shadow-md rounded-tl-lg rounded-tr-lg md:rounded-none pt-[60px]">
-            {!editHeading && <h1 className='text-center text-primary text-[1.8rem] cursor-pointer' onClick={() => setEditHeading(true)}>{selectedChat?.title}</h1>}
+        <div className={`flex-1 p-4 flex flex-col ${chatState.categoryBgColors[chatState.selectedChatInfo.categoryId]} shadow-md pt-[60px]`}>
+            {!editHeading && <h1 className={`text-center ${chatState.categoryTextColors[chatState.selectedChatInfo.categoryId]} text-[1.8rem] cursor-pointer`} onClick={handleEditHeading}>{selectedChat?.title}</h1>}
             {editHeading &&
                 <div className='flex justify-center mb-4'>
-                    <div className='flex items-center text-primary gap-2'>
+                    <div className={`flex items-center ${chatState.categoryTextColors[chatState.selectedChatInfo.categoryId]} gap-2`}>
                         <Input
-                            className='px-[0.2rem] py-[0.4rem] lg:text-[1.8rem] text-[1.1rem] text-center border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200'
+                            className='px-[0.2rem] py-[0.4rem] lg:text-[1.8rem] text-[1.1rem] text-primary text-center border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200'
                             text={heading!} placeholder={'Enter New Heading'}
                             onChangeText={(e: any) => setHeading(e.target.value)}
                             onKeyPressHandler={(e: any) => onSaveHeading(e.key)} />
@@ -62,15 +72,15 @@ export const Chat = () => {
                 {selectedChat ? selectedChat?.messages.map((msg, index) => (
                     <React.Fragment key={index}>
                         <div className="flex justify-end py-3">
-                            <span className='bg-gray-100 text-primary px-2 py-1 rounded-md'>{msg.question}</span>
+                            <span className={`${chatState.categoryAccentColors[chatState.selectedChatInfo.categoryId]} ${chatState.categoryTextColors[chatState.selectedChatInfo.categoryId]} py-1 px-2 rounded-md`}>{msg.question}</span>
                         </div>
-                        <div className='text-left text-primary py-3'>
+                        <div className={`text-left ${chatState.categoryTextColors[chatState.selectedChatInfo.categoryId]} py-3`}>
                             {msg.answer}
                         </div>
                     </React.Fragment>
                 )) :
                     <React.Fragment>
-                        <div className='flex justify-center text-primary'>
+                        <div className={`flex justify-center text-primary`}>
                             <div className='flex flex-col gap-4'>
                                 <div className='flex justify-center'>
                                     <MdOutlineSpeakerNotesOff size={100} />
@@ -84,7 +94,7 @@ export const Chat = () => {
 
             <div className="flex items-center mt-4">
                 <Input
-                    className='flex-1 p-[0.2rem] text-primary border border-gray-300 rounded-l-lg focus:outline-none focus:ring focus:ring-blue-200'
+                    className={`flex-1 p-[0.2rem] text-primary border border-gray-300 rounded-l-lg focus:outline-none`}
                     text={newMessage}
                     placeholder={'Type a message'}
                     onChangeText={(e: any) => setnewMessage(e.target.value)} />

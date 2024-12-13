@@ -1,20 +1,32 @@
-import { CATEGORIES } from '@/src/helpers/constants/chats';
+import { CATEGORIES, CATEGORY_ACCENT_COLORS, CATEGORY_BG_COLORS, CATEGORY_FONT_COLORS } from '@/src/helpers/constants/chats';
 import { Chat } from '@/src/helpers/model/Chat';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ChatState {
-    selectedChatInfo: { category: string, id: string };
+    selectedChatInfo: { categoryId: string, chatId: string };
     categories: {
         [categoryId: string]: Array<Chat>;
     };
+    categoryBgColors: {
+        [key: string]: string;
+    },
+    categoryTextColors: {
+        [key: string]: string;
+    }
+    categoryAccentColors: {
+        [key: string]: string;
+    }
 }
 
 const initialState: ChatState = {
     selectedChatInfo: {
-        category: 'Work',
-        id: 'work-chat-1',
+        categoryId: 'Work',
+        chatId: 'work-chat-1',
     },
     categories: CATEGORIES,
+    categoryBgColors: CATEGORY_BG_COLORS,
+    categoryTextColors: CATEGORY_FONT_COLORS,
+    categoryAccentColors: CATEGORY_ACCENT_COLORS
 };
 
 const sessionSlice = createSlice({
@@ -24,8 +36,8 @@ const sessionSlice = createSlice({
         moveChatToCategory: (state: ChatState, action: PayloadAction<{ chatId: string; categoryId: string }>) => {
             const { chatId, categoryId } = action.payload;
             state.selectedChatInfo = {
-                category: action.payload.categoryId,
-                id: action.payload.chatId
+                categoryId: action.payload.categoryId,
+                chatId: action.payload.chatId
             };
             let chatToMove;
             for (let category in state.categories) {
@@ -49,6 +61,8 @@ const sessionSlice = createSlice({
         removeCategory: (state: ChatState, action: PayloadAction<{ categoryIdToRemove: string }>) => {
             if (state.categories[action.payload.categoryIdToRemove]) {
                 delete state.categories[action.payload.categoryIdToRemove];
+                state.selectedChatInfo.categoryId = '';
+                state.selectedChatInfo.chatId = '';
             }
         },
         removeChat: (state: ChatState, action: PayloadAction<{ categoryId: string; chatIdToRemove: string }>) => {
@@ -56,11 +70,13 @@ const sessionSlice = createSlice({
 
             if (chatIdxToRemove > -1) {
                 state.categories[action.payload.categoryId].splice(chatIdxToRemove, 1);
+                state.selectedChatInfo.categoryId = '';
+                state.selectedChatInfo.chatId = '';
             }
         },
         sendMessage: (state: ChatState, action: PayloadAction<{ question: string }>) => {
-            const chatIdx = state.categories[state.selectedChatInfo.category].findIndex(chat => chat.id === state.selectedChatInfo.id);
-            state.categories[state.selectedChatInfo.category][chatIdx].messages.push({ question: action.payload.question, answer: `Answer mock up for: ${action.payload.question}` });
+            const chatIdx = state.categories[state.selectedChatInfo.categoryId].findIndex(chat => chat.id === state.selectedChatInfo.chatId);
+            state.categories[state.selectedChatInfo.categoryId][chatIdx].messages.push({ question: action.payload.question, answer: `Answer mock up for: ${action.payload.question}` });
         },
         addChat: (state: ChatState, action: PayloadAction<{ categoryId: string }>) => {
             state.categories[action.payload.categoryId].push({
@@ -70,10 +86,16 @@ const sessionSlice = createSlice({
             })
         },
         updateChatHeading: (state: ChatState, action: PayloadAction<{ heading: string }>) => {
-            const chatIdx = state.categories[state.selectedChatInfo.category]?.findIndex(chat => chat.id === state.selectedChatInfo.id);
+            const chatIdx = state.categories[state.selectedChatInfo.categoryId]?.findIndex(chat => chat.id === state.selectedChatInfo.chatId);
 
             if (chatIdx > -1) {
-                state.categories[state.selectedChatInfo.category][chatIdx].title = action.payload.heading;
+                state.categories[state.selectedChatInfo.categoryId][chatIdx].title = action.payload.heading;
+            }
+        },
+        updateSelectedChat: (state: ChatState, action: PayloadAction<{ chatId: string; categoryId: string }>) => {
+            state.selectedChatInfo = {
+                chatId: action.payload.chatId,
+                categoryId: action.payload.categoryId
             }
         }
     },
@@ -86,7 +108,8 @@ export const {
     removeChat,
     sendMessage,
     addChat,
-    updateChatHeading
+    updateChatHeading,
+    updateSelectedChat
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

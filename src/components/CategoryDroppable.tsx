@@ -1,13 +1,12 @@
 import { useDroppable } from "@dnd-kit/core";
-import { categoryColors } from "../helpers/constants/chats";
 import { MdDeleteForever } from "react-icons/md";
-import { AppDispatch } from "../lib/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../lib/store";
+import { useDispatch, useSelector } from "react-redux";
 import { removeCategory } from "../lib/features/chat/chatSlice";
 
 export const CategoryDroppable = ({ categoryId, children }: { categoryId: string; children: React.ReactNode }) => {
     const { setNodeRef } = useDroppable({ id: categoryId });
-    const categoryColor = categoryColors[categoryId];
+    const chatState = useSelector((state: RootState) => state.chat)
     const dispatch = useDispatch<AppDispatch>();
 
     const onDeleteCategory = () => {
@@ -19,7 +18,7 @@ export const CategoryDroppable = ({ categoryId, children }: { categoryId: string
             <div className="flex items-center justify-between gap-2 mb-2">
                 <div className="font-bold text-white">{categoryId}</div>
                 <span className="flex items-center gap-1">
-                    <div className={`w-4 h-4 ${categoryColor} rounded-full`}></div>
+                    <div className={`w-4 h-4 ${chatState.categoryBgColors[categoryId]} rounded-full`}></div>
                     <MdDeleteForever className="text-delete cursor-pointer" size={24} onClick={onDeleteCategory} />
                 </span>
             </div>
