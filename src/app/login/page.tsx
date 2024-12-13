@@ -23,9 +23,9 @@ export default function Login() {
     const config: StytchLoginConfig = {
         products: [Products.emailMagicLinks, Products.oauth],
         emailMagicLinksOptions: {
-            loginRedirectURL: process.env.REDIRECT_URL,
+            loginRedirectURL: process.env.NEXT_PUBLIC_REDIRECT_URL,
             loginExpirationMinutes: 60,
-            signupRedirectURL: process.env.REDIRECT_URL,
+            signupRedirectURL: process.env.NEXT_PUBLIC_REDIRECT_URL,
             signupExpirationMinutes: 60,
         },
         oauthOptions: {

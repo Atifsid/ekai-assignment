@@ -16,7 +16,7 @@ const stytchOptions = {
 }
 
 const stytchClient = createStytchUIClient(
-    process.env.STYTCH_PUBLIC_TOKEN ?? '',
+    process.env.NEXT_PUBLIC_STYTCH_PUBLIC_TOKEN ?? '',
     stytchOptions
 );
 
