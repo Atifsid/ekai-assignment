@@ -24,44 +24,66 @@ function Authenticate() {
 
     const [loading, setLoading] = useState(true);
 
+    const handleLogin = ({ username, token }: { username: string; token: string }) => {
+        dispatch(
+            login({
+                username: username,
+                token: token,
+            })
+        );
+        router.replace("/dashboard");
+        setLoading(false);
+    }
+
+    const handLogout = () => {
+        dispatch(logout());
+        router.replace("/login");
+        setLoading(false);
+    }
+
+    const checkIfUserPresent = () => {
+        const username = localStorage.getItem('userName');
+        const token = localStorage.getItem('token');
+        if (token && username && token.trim().length > 0 && username.trim().length > 0) {
+            handleLogin({ username, token: token });
+        } else {
+            handLogout();
+        }
+    }
+
     useEffect(() => {
+        setLoading(true);
         const authenticateUser = async () => {
-            if (stytch && !user && isInitialized) {
-                const tokenType = searchParams.get("stytch_token_type");
-                const token = searchParams.get("token");
-                if (token && tokenType === "magic_links") {
-                    try {
-                        await stytch.magicLinks.authenticate(token, {
+            if (stytch && isInitialized) {
+                if (!user) {
+                    const tokenType = searchParams.get("stytch_token_type");
+                    const token = searchParams.get("token");
+                    if (token && tokenType === "magic_links") {
+                        stytch.magicLinks.authenticate(token, {
                             session_duration_minutes: 60,
+                        }).then((res) => {
+                            handleLogin({
+                                token: res.session_jwt,
+                                username: res.user.name.first_name
+                            });
+                        }).catch((e) => {
+                            handLogout();
                         });
-                    } catch (err) {
-                        console.error("Authentication failed:", err);
+                    } else {
+                        checkIfUserPresent();
                     }
+                } else {
+                    checkIfUserPresent();
                 }
+            } else {
+                setTimeout(() => {
+                    authenticateUser();
+                }, 1000);
             }
         };
 
         authenticateUser();
-    }, [isInitialized, stytch, searchParams]);
-
-    useEffect(() => {
-        if (isInitialized) {
-            if (user) {
-                dispatch(
-                    login({
-                        username: `${user.name.first_name} ${user.name.last_name}`,
-                        token: user.user_id,
-                    })
-                );
-                router.replace("/dashboard");
-            } else {
-                stytch.session.revoke();
-                dispatch(logout());
-                router.replace("/login");
-            }
-            setLoading(false);
-        }
-    }, [user, isInitialized, dispatch, router]);
+    }, [isInitialized, searchParams, user]);
 
     return loading ? <Loading /> : null;
 }

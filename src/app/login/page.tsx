@@ -41,7 +41,7 @@ export default function Login() {
             const token = localStorage.getItem("token");
             const username = localStorage.getItem("userName");
 
-            if (token?.trim()) {
+            if (token && username && token.trim().length > 0 && username.trim().length > 0) {
                 dispatch(login({ token, username }));
                 router.replace("/dashboard");
             } else if (pathname !== "/login") {
