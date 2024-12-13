@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useStytch, useStytchUser } from "@stytch/nextjs";
 import Loading from "@/src/components/Loading";
@@ -7,7 +7,15 @@ import { AppDispatch } from "@/src/lib/store";
 import { useDispatch } from "react-redux";
 import { login, logout } from "@/src/lib/features/session/sessionSlice";
 
-export default function Authenticate() {
+export default function AuthenticateWrapper() {
+    return (
+        <Suspense fallback={<Loading />}>
+            <Authenticate />
+        </Suspense>
+    );
+}
+
+function Authenticate() {
     const { user, isInitialized } = useStytchUser();
     const stytch = useStytch();
     const router = useRouter();

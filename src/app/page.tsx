@@ -1,10 +1,10 @@
-import Authenticate from './authenticate/page';
+import AuthenticateWrapper from "./authenticate/page";
 
 export default function Home() {
   return (
     <main>
       <div className="container">
-        <Authenticate />
+        <AuthenticateWrapper />
       </div>
     </main>
   );
