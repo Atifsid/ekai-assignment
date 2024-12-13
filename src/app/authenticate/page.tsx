@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useStytch, useStytchUser } from "@stytch/nextjs";
 import Loading from "@/src/components/Loading";
@@ -8,7 +8,11 @@ import { AppDispatch } from "../../lib/store";
 import { useDispatch } from "react-redux";
 
 export default function AuthenticateWrapper() {
-    return <Authenticate />;
+    return (
+        <Suspense>
+            <Authenticate />
+        </Suspense>
+    );
 }
 
 function Authenticate() {
