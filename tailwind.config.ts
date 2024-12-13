@@ -13,7 +13,8 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: '#19303d',
-        secondary: '#ffffff'
+        secondary: '#ffffff',
+        delete: '#dc3545'
       },
       spacing: {
         '128': '32rem',

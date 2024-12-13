@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FaArrowUp } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { RootState } from '../lib/store';
@@ -9,11 +9,6 @@ export const Chat = () => {
     const selectedChat = chatState.categories[chatState.selectedChatInfo?.category]?.find(
         (chat) => chat.id === chatState.selectedChatInfo?.id
     );
-
-    useEffect(() => {
-        console.log(selectedChat);
-
-    }, [selectedChat])
 
     const handleSendMessage = () => {
         if (input.trim()) {

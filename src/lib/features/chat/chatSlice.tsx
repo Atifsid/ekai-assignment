@@ -38,10 +38,32 @@ const sessionSlice = createSlice({
             if (chatToMove) {
                 state.categories[categoryId].push(chatToMove);
             }
+        },
+        addCategory: (state: ChatState, action: PayloadAction<{ newCategoryId: string }>) => {
+            state.categories[action.payload.newCategoryId] = [];
+            state.categories = {
+                [action.payload.newCategoryId]: [],
+                ...state.categories
+            }
+        },
+        removeCategory: (state: ChatState, action: PayloadAction<{ categoryIdToRemove: string }>) => {
+            if (state.categories[action.payload.categoryIdToRemove]) {
+                delete state.categories[action.payload.categoryIdToRemove];
+            }
+        },
+        removeChat: (state: ChatState, action: PayloadAction<{ categoryId: string; chatIdToRemove: string }>) => {
+            console.log(state.categories[action.payload.categoryId]);
+
+            const chatIdxToRemove = state.categories[action.payload.categoryId]?.findIndex(chat => chat.id === action.payload.chatIdToRemove);
+            console.log(chatIdxToRemove);
+
+            if (chatIdxToRemove > -1) {
+                state.categories[action.payload.categoryId].splice(chatIdxToRemove, 1);
+            }
         }
     },
 });
 
-export const { moveChatToCategory } = sessionSlice.actions;
+export const { moveChatToCategory, addCategory, removeCategory, removeChat } = sessionSlice.actions;
 
 export default sessionSlice.reducer;
