@@ -22,7 +22,7 @@ function Authenticate() {
     const searchParams = useSearchParams();
     const dispatch = useDispatch<AppDispatch>();
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = ({ username, token }: { username: string; token: string }) => {
         dispatch(
@@ -51,6 +51,34 @@ function Authenticate() {
         }
     }
 
+    const handleMagicLinksLogin = async (token: string) => {
+        try {
+            const result = await stytch.magicLinks.authenticate(token, {
+                session_duration_minutes: 60,
+            });
+            handleLogin({
+                token: result.session_jwt,
+                username: result.user.name.first_name
+            });
+        } catch (error) {
+            handLogout();
+        }
+    }
+
+    const handleOAuthLogin = async (token: string) => {
+        try {
+            const result = await stytch.oauth.authenticate(token, {
+                session_duration_minutes: 60,
+            });
+            handleLogin({
+                token: result.session_jwt,
+                username: result.user.name.first_name
+            });
+        } catch (error) {
+            handLogout();
+        }
+    }
+
     useEffect(() => {
         setLoading(true);
         const authenticateUser = async () => {
@@ -58,17 +86,13 @@ function Authenticate() {
                 if (!user) {
                     const tokenType = searchParams.get("stytch_token_type");
                     const token = searchParams.get("token");
-                    if (token && tokenType === "magic_links") {
-                        stytch.magicLinks.authenticate(token, {
-                            session_duration_minutes: 60,
-                        }).then((res) => {
-                            handleLogin({
-                                token: res.session_jwt,
-                                username: res.user.name.first_name
-                            });
-                        }).catch((e) => {
-                            handLogout();
-                        });
+                    if (token) {
+                        if (tokenType === "magic_links") {
+                            handleMagicLinksLogin(token);
+                        }
+                        if (tokenType === "oauth") {
+                            handleOAuthLogin(token);
+                        }
                     } else {
                         checkIfUserPresent();
                     }
