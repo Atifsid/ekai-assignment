@@ -75,48 +75,54 @@ export const Chat = () => {
                     </div>
                 </div>
             }
-            <div className="flex-1 overflow-y-auto">
-                {selectedChat ? selectedChat?.messages.map((msg, index) => (
-                    <React.Fragment key={index}>
-                        <div className="flex justify-end py-3">
-                            <span style={{ backgroundColor: chatState.categoryAccentColors[chatState.selectedChatInfo.categoryId], color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }} className={`py-1 px-2 rounded-md`}>{msg.question}</span>
-                        </div>
-                        <div className={`text-left py-3`} style={{ color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }}>
-                            {msg.answer}
-                        </div>
-                    </React.Fragment>
-                )) :
-                    <React.Fragment>
-                        <div className={`flex justify-center text-primary`}>
-                            <div className='flex flex-col gap-4'>
-                                <div className='flex justify-center'>
-                                    <MdOutlineSpeakerNotesOff size={100} />
+            <div className='flex-1 overflow-y-auto'>
+                <div className='flex justify-center'>
+                    <div className="w-full lg:w-[95%]">
+                        {selectedChat ? selectedChat?.messages.map((msg, index) => (
+                            <React.Fragment key={index}>
+                                <div className="flex justify-end py-3">
+                                    <span style={{ backgroundColor: chatState.categoryAccentColors[chatState.selectedChatInfo.categoryId], color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }} className={`py-1 px-2 rounded-md`}>{msg.question}</span>
                                 </div>
-                                <span className='text-xl'>Please Select a Chat.</span>
-                            </div>
-                        </div>
-                    </React.Fragment>
-                }
+                                <div className={`text-left py-3`} style={{ color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }}>
+                                    {msg.answer}
+                                </div>
+                            </React.Fragment>
+                        )) :
+                            <React.Fragment>
+                                <div className={`flex justify-center text-primary`}>
+                                    <div className='flex flex-col gap-4'>
+                                        <div className='flex justify-center'>
+                                            <MdOutlineSpeakerNotesOff size={100} />
+                                        </div>
+                                        <span className='text-xl'>Please Select a Chat.</span>
+                                    </div>
+                                </div>
+                            </React.Fragment>
+                        }
+                    </div>
+                </div>
             </div>
 
-            <div className="flex items-center mt-4">
-                <Input
-                    className={`flex-1 py-[0.5rem] px-[0.5rem] text-primary border border-gray-300 rounded-lg focus:outline-none`}
-                    text={newMessage}
-                    placeholder={'Type a message'}
-                    onChangeText={(e: any) => setNewMessage(e.target.value)}
-                    onKeyPressHandler={(e: any) => handleEnterSendMessage(e)} />
-                <button
-                    disabled={loading}
-                    className="bg-primary text-white ml-2 px-4 py-[0.71rem] rounded-lg border-y-1 border-primary  hover:bg-blue-600"
-                    onClick={handleSendMessage}
-                >
+            <div className='flex justify-center'>
+                <div className="flex items-center mt-4 w-full lg:w-[95%]">
+                    <Input
+                        className={`flex-1 py-[0.5rem] px-[0.5rem] text-primary border border-gray-300 rounded-lg focus:outline-none`}
+                        text={newMessage}
+                        placeholder={'Type a message'}
+                        onChangeText={(e: any) => setNewMessage(e.target.value)}
+                        onKeyPressHandler={(e: any) => handleEnterSendMessage(e)} />
+                    <button
+                        disabled={loading}
+                        className="bg-primary text-white ml-2 px-4 py-[0.71rem] rounded-lg border-y-1 border-primary  hover:bg-blue-600"
+                        onClick={handleSendMessage}
+                    >
 
-                    {!loading ? <FaArrowUp size={20} /> : <svg className="animate-spin w-[20px] text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>}
-                </button>
+                        {!loading ? <FaArrowUp size={20} /> : <svg className="animate-spin w-[20px] text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>}
+                    </button>
+                </div>
             </div>
         </div>
     );
