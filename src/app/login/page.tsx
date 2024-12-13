@@ -1,23 +1,25 @@
 "use client";
-import { StytchLogin } from '@stytch/nextjs';
-import { Products, StytchLoginConfig } from '@stytch/vanilla-js';
-import useIsLargeScreen from '../../helpers/hooks/useIsLargeScreen';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { AppDispatch } from '@/src/lib/store';
-import { useDispatch } from 'react-redux';
-import { login } from '@/src/lib/features/session/sessionSlice';
-import Loading from '@/src/components/Loading';
+import { StytchLogin } from "@stytch/nextjs";
+import { Products, StytchLoginConfig } from "@stytch/vanilla-js";
+import useIsLargeScreen from "../../helpers/hooks/useIsLargeScreen";
+import { useRouter, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { AppDispatch } from "@/src/lib/store";
+import { useDispatch } from "react-redux";
+import { login } from "@/src/lib/features/session/sessionSlice";
+import Loading from "@/src/components/Loading";
 
 export default function Login() {
     const { isLargeScreen } = useIsLargeScreen();
     const router = useRouter();
-    const [userId, setUserId] = useState<string | null>(null);
+    const pathname = usePathname();
     const dispatch = useDispatch<AppDispatch>();
+
+    const [isAuthenticating, setIsAuthenticating] = useState(true);
 
     const styles = {
         container: {
-            width: `${isLargeScreen ? '30vw' : '90vw'}`,
+            width: `${isLargeScreen ? "30vw" : "90vw"}`,
         },
     };
 
@@ -30,28 +32,35 @@ export default function Login() {
             signupExpirationMinutes: 60,
         },
         oauthOptions: {
-            providers: [{
-                type: 'google'
-            }]
-        }
+            providers: [{ type: "google" }],
+        },
     };
 
     useEffect(() => {
-        setUserId(null);
-        const token = localStorage.getItem('token');
-        const username = localStorage.getItem('userName');
-        if (token && token != '') {
-            setUserId(token);
-            dispatch(login({ token, username }))
-            router.push('/dashboard');
-        } else {
-            router.push('/login');
-        }
-    }, [router]);
+        const authenticate = async () => {
+            const token = localStorage.getItem("token");
+            const username = localStorage.getItem("userName");
+
+            if (token?.trim()) {
+                dispatch(login({ token, username }));
+                router.replace("/dashboard");
+            } else if (pathname !== "/login") {
+                router.replace("/login");
+            }
+
+            setIsAuthenticating(false);
+        };
+
+        authenticate();
+    }, [dispatch, router, pathname]);
+
+    if (isAuthenticating) {
+        return <Loading />;
+    }
 
     return (
-        <div className='flex justify-center items-center h-screen'>
-            {!userId ? <StytchLogin config={config} styles={styles} /> : <Loading />}
+        <div className="flex justify-center items-center h-screen">
+            <StytchLogin config={config} styles={styles} />
         </div>
     );
 }

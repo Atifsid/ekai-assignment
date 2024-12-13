@@ -1,33 +1,38 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../lib/store';
-import Loading from './Loading';
-import { login } from '../lib/features/session/sessionSlice';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../lib/store";
+import Loading from "./Loading";
+import { login } from "../lib/features/session/sessionSlice";
 
-const ProtectedRoute = ({ children }: any) => {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
-    const [userName, setUserName] = useState<string | null>(null);
     const dispatch = useDispatch<AppDispatch>();
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
     useEffect(() => {
-        // instead of this next js' middleware must be used.
-        // get token from NextRequest or check if it's a unauthorized req
-        // then navigate to login else dashboard.
-        setUserName(null);
-        const token = localStorage.getItem('token');
-        const username = localStorage.getItem('userName');
-        if (token?.trim() != '' && username?.trim() != '') {
-            setUserName(username);
-            dispatch(login({ token, username }))
-            router.push('/dashboard');
-        } else {
-            router.push('/login');
-        }
-    }, [router]);
+        const checkAuthentication = async () => {
+            const token = localStorage.getItem("token");
+            const username = localStorage.getItem("userName");
 
-    if (!userName) {
-        return <div><Loading /> </div>;
+            if (token?.trim() && username?.trim()) {
+                dispatch(login({ token, username }));
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+                router.replace("/login");
+            }
+        };
+
+        checkAuthentication();
+    }, [dispatch, router]);
+
+    if (isAuthenticated === null) {
+        return <Loading />;
+    }
+
+    if (!isAuthenticated) {
+        return null;
     }
 
     return <>{children}</>;
