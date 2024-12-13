@@ -14,7 +14,7 @@ export const DraggableChat = ({ chat }: { chat: Chat; }) => {
             className={`mb-2 cursor-pointer hover:bg-gray-700 p-2 rounded bg-gray-600 ${isDragging ? 'opacity-50 bg-gray-400' : ''}`}
         >
             <div className='flex justify-between items-center'>
-                <span className="w-64 truncate overflow-hidden whitespace-nowrap">{chat.title}</span>
+                <span className="w-full truncate overflow-hidden whitespace-nowrap" title={chat.title!}>{chat.title}</span>
             </div>
         </ul>
     );

@@ -28,7 +28,7 @@ export const CategoryDroppable = ({ categoryId, children }: { categoryId: string
     return (
         <div ref={setNodeRef} className={`category p-2 mb-4 bg-gray-800 rounded min-h-[150px]`}>
             <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="font-bold text-white">{categoryId}</div>
+                <div className="font-bold text-white w-full truncate overflow-hidden whitespace-nowrap cursor-pointer" title={categoryId}>{categoryId}</div>
                 <span className="flex items-center gap-1">
                     <input
                         className="absolute opacity-0 pointer-events-none -z-1"
@@ -39,7 +39,7 @@ export const CategoryDroppable = ({ categoryId, children }: { categoryId: string
                     />
                     <div
                         style={{ backgroundColor: chatState.categoryBgColors[categoryId] }}
-                        className={`w-5 h-5 rounded-full`}
+                        className={`w-5 h-5 rounded-full cursor-pointer`}
                         onClick={toggleColorPicker}
                     ></div>
                     <MdDeleteForever className="text-delete cursor-pointer" size={24} onClick={onDeleteCategory} />

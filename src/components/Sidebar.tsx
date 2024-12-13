@@ -97,7 +97,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                     {isSaveNewCategoryVisible &&
                         <div>
                             <Input
-                                className='flex-1 px-[0.4rem] py-[0.2rem] text-primary border border-gray-300 rounded-md focus:outline-none'
+                                className='flex-1 px-[0.4rem] py-[0.2rem] w-full text-primary border border-gray-300 rounded-md focus:outline-none'
                                 text={newCategory}
                                 placeholder={'Enter New Category'}
                                 onChangeText={(e: any) => setNewCategory(e.target.value)} />
