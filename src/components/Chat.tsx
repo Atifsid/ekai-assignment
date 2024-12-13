@@ -60,22 +60,24 @@ export const Chat = () => {
     }
 
     return (
-        <div className={`flex-1 p-4 flex flex-col shadow-md pt-[60px]`} style={{ backgroundColor: chatState.categoryBgColors[chatState.selectedChatInfo.categoryId] }}>
-            {!editHeading && <h1 className={`text-center text-[1.8rem] cursor-pointer`} style={{ color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }} onClick={handleEditHeading}>{selectedChat?.title}</h1>}
-            {editHeading &&
-                <div className='flex justify-center mb-4'>
-                    <div className={`flex items-center gap-2`} style={{ color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }}>
-                        <Input
-                            className='px-[0.2rem] py-[0.4rem] lg:text-[1.8rem] text-[1.1rem] text-primary text-center border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200'
-                            text={heading!} placeholder={'Enter New Heading'}
-                            onChangeText={(e: any) => setHeading(e.target.value)}
-                            onKeyPressHandler={(e: any) => onSaveHeading(e.key)} />
-                        <FaCheckCircle size={25} className='cursor-pointer' onClick={handleSaveHeading} />
-                        <MdCancel size={28} className='cursor-pointer' onClick={() => setEditHeading(false)} />
+        <div className={`flex-1 h-screen p-4 flex flex-col shadow-md pt-[60px] relative`} style={{ backgroundColor: chatState.categoryBgColors[chatState.selectedChatInfo.categoryId] }}>
+            <div className='absolute left-0 right-0 w-full' style={{ backgroundColor: chatState.categoryBgColors[chatState.selectedChatInfo.categoryId] }}>
+                {!editHeading && <h1 className={`text-center text-[1.8rem] cursor-pointer`} style={{ color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }} onClick={handleEditHeading}>{selectedChat?.title}</h1>}
+                {editHeading &&
+                    <div className='flex justify-center mb-4'>
+                        <div className={`flex items-center gap-2`} style={{ color: chatState.categoryTextColors[chatState.selectedChatInfo.categoryId] }}>
+                            <Input
+                                className='px-[0.2rem] py-[0.4rem] lg:text-[1.8rem] text-[1.1rem] text-primary text-center border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200'
+                                text={heading!} placeholder={'Enter New Heading'}
+                                onChangeText={(e: any) => setHeading(e.target.value)}
+                                onKeyPressHandler={(e: any) => onSaveHeading(e.key)} />
+                            <FaCheckCircle size={25} className='cursor-pointer' onClick={handleSaveHeading} />
+                            <MdCancel size={28} className='cursor-pointer' onClick={() => setEditHeading(false)} />
+                        </div>
                     </div>
-                </div>
-            }
-            <div className='flex-1 overflow-y-auto'>
+                }
+            </div>
+            <div className='flex-1 overflow-y-auto mt-[45px]'>
                 <div className='flex justify-center'>
                     <div className="w-full lg:w-[95%]">
                         {selectedChat ? selectedChat?.messages.map((msg, index) => (

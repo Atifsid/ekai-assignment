@@ -14,6 +14,24 @@ export const CATEGORIES = {
             messages: [
                 { question: 'What was discussed in today\'s meeting?', answer: 'We went over the quarterly goals and client deliverables.' },
                 { question: 'Who will be handling the marketing?', answer: 'Sarah will be managing the marketing campaign starting next month.' },
+                { question: 'What are the quarterly goals?', answer: 'Our goals include increasing client retention by 15%, improving lead generation, and launching a new product feature.' },
+                { question: 'What is the timeline for the new product feature?', answer: 'The new product feature will be launched by the end of Q2.' },
+                { question: 'What about the client deliverables?', answer: 'The client deliverables need to be completed by the end of this month.' },
+                { question: 'Is there a new deadline for the sales team?', answer: 'Yes, the sales team has a new deadline to submit their reports by the 15th of next month.' },
+                { question: 'Who is in charge of the client reports?', answer: 'John will be handling the client reports for this quarter.' },
+                { question: 'What did we decide about the team collaboration tool?', answer: 'We decided to switch to Slack for internal communication and Trello for project management.' },
+                { question: 'Is there a budget for team events?', answer: 'Yes, we have a budget of $2,000 for the next team-building event.' },
+                { question: 'When will the next team-building event be held?', answer: 'The next event will be held in the first week of next month.' },
+                { question: 'Are there any upcoming training sessions?', answer: 'Yes, there will be a leadership training session next Wednesday.' },
+                { question: 'Who is attending the training session?', answer: 'Tom, Lisa, and Rachel will be attending the leadership training.' },
+                { question: 'What about the customer feedback review?', answer: 'The customer feedback review will be conducted by Emma next Monday.' },
+                { question: 'When is the next department meeting?', answer: 'The next department meeting is scheduled for next Thursday at 10 AM.' },
+                { question: 'Are we hiring anyone this quarter?', answer: 'Yes, we are looking to hire a new software developer by the end of the quarter.' },
+                { question: 'What’s the update on the website redesign?', answer: 'The website redesign is on track, with a planned launch date of May 15th.' },
+                { question: 'Who is responsible for the website redesign?', answer: 'Alice is leading the website redesign project.' },
+                { question: 'Is the marketing campaign ready to launch?', answer: 'Yes, the marketing campaign is ready to go live next Monday.' },
+                { question: 'What are the new marketing objectives?', answer: 'The new marketing objectives are to increase brand awareness and drive more traffic to the website.' },
+                { question: 'What about the upcoming product launch?', answer: 'The upcoming product launch will happen in June, and we are finalizing the promotional strategy.' }
             ]
         }
     ],
